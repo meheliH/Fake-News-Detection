@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Headline Classifier</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 600px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            color: #333; /* Text color */
+        }
+        h1 {
+            color: #007bff; /* Header color */
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9; /* Input background color */
+            color: #333; /* Input text color */
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3; /* Darker shade on hover */
+        }
+        .output-container {
+            margin-top: 20px;
+        }
+        #resultContainer {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+        #classificationResult {
+            color: #333; /* Text color */
+            font-weight: bold;
+        }
+        /* Additional styles for a more colorful design */
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .input-container input, .input-container button {
+            margin-bottom: 10px;
+        }
+        button {
+            width: 100%; /* Make button full width */
+        }
+        .headline-input {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            color: #333;
+            font-size: 18px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .classify-btn {
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background-color: #007bff;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .classify-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>News Headline Classifier</h1>
+        <input type="text" id="headlineInput" placeholder="Enter news headline...">
+        <button onclick="classifyHeadline()">Classify</button>
+        <div id="resultContainer">
+            <h2>Classification Result:</h2>
+            <div id="classificationResult"></div>
+        </div>
+    </div>
+    
+
+    <script>
+        function classifyHeadline() {
+            var headlineInput = document.getElementById("headlineInput").value;
+            if (headlineInput.trim() !== "") {
+                fetch("http://localhost:5000/classify", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ headline: headlineInput })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("classificationResult").innerText = data.result;
+                })
+                .catch(error => console.error("Error:", error));
+            } else {
+                alert("Please enter a news headline!");
+            }
+        }
+    </script>
+</body>
+</html>
